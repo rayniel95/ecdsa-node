@@ -1,3 +1,4 @@
+const { Sequelize, DataTypes } = require('sequelize');
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -5,6 +6,39 @@ const port = 3042;
 
 app.use(cors());
 app.use(express.json());
+
+const sequelize = new Sequelize('sqlite::memory:');
+const Transaction = sequelize.define('Transaction', {
+  // Model attributes are defined here
+  timestamp: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    unique: true,
+  },
+  nonce: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  fromAddress: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  toAddress: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  }
+}, {
+  // Other model options go here
+});
+await Transaction.sync();
+
+// balance:{
+//   type: DataTypes.BIGINT,
+//   allowNull: false
+// }
 
 const balances = {
   "0x1": 100,
