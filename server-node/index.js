@@ -8,37 +8,48 @@ app.use(cors());
 app.use(express.json());
 
 const sequelize = new Sequelize('sqlite::memory:');
+
 const Transaction = sequelize.define('Transaction', {
   // Model attributes are defined here
   timestamp: {
     type: DataTypes.DATE,
     allowNull: false,
-    unique: true,
   },
   nonce: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   fromAddress: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   toAddress: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   }
 }, {
   // Other model options go here
 });
 await Transaction.sync();
 
-// balance:{
-//   type: DataTypes.BIGINT,
-//   allowNull: false
-// }
+const Account = sequelize.define('Account', {
+  // Model attributes are defined here
+  Address: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  balance: {
+    type: DataTypes.BIGINT,
+    allowNull: false,
+    defaultValue: 0
+  }
+}, {
+  // Other model options go here
+});
+await Account.sync();
+
+Account.hasMany(Transaction)
 
 const balances = {
   "0x1": 100,
