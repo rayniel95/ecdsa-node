@@ -14,10 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Transaction.init({
-    timestamp: DataTypes.DATE,
-    nonce: DataTypes.STRING,
-    fromAddress: DataTypes.STRING,
-    toAddress: DataTypes.STRING
+    timestamp: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    nonce: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    fromAddress: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    toAddress: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   }, {
     sequelize,
     modelName: 'Transaction',

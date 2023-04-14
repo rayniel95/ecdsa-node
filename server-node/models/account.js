@@ -14,8 +14,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Account.init({
-    address: DataTypes.STRING,
-    balance: DataTypes.BIGINT
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    balance: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: 0
+    }
   }, {
     sequelize,
     modelName: 'Account',
