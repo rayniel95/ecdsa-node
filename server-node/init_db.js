@@ -1,11 +1,26 @@
 import { Model } from "sequelize"
 
+
 /**
  * 
  * @param {Model} account 
- * @returns {void}
  */
+export async function initDatabase(account) {
+    await account.findOrCreate({
+        where: {
+            address: 'here one address'
+        }
+    })
 
-export function initDatabase(account) {
-    account.findOne()
+    await account.findOrCreate({
+        where: {
+            address: 'here two address'
+        }
+    })
+
+    await account.findOrCreate({
+        where: {
+            address: 'here three address'
+        }
+    })
 }
