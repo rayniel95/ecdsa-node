@@ -1,16 +1,9 @@
-import { Model } from "sequelize"
-
-
-/**
- * init the database if there is not item.
- * @param {Model} account 
- */
-export async function initDatabase(account) {
+module.exports = async (account) => {
     await account.findOrCreate({
         where: {
             address: '0x8b2ff5c6bb4685e48707fc69a3729ee9b53162d7'
         },
-        defaults:{
+        defaults: {
             balance: 100
         }
     })
@@ -19,7 +12,7 @@ export async function initDatabase(account) {
         where: {
             address: '0x456cfd7ef7554290a1931cdd9f1d28623723872e'
         },
-        defaults:{
+        defaults: {
             balance: 100
         }
     })
@@ -32,4 +25,4 @@ export async function initDatabase(account) {
             balance: 100
         }
     })
-}
+};
