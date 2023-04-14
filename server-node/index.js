@@ -3,13 +3,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = 3042;
-const defineModels = require('./models');
+const {defineModels} = require('./models');
 const { initDatabase } = require('./init_db');
 
 app.use(cors());
 app.use(express.json());
 
 const sequelize = new Sequelize('sqlite::memory:');
+
 const {Account, Transaction} = defineModels(sequelize);
 
 await sequelize.sync()
