@@ -1,21 +1,22 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const db = require("./models");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const initAccounts = require("./initAccounts");
 const port = 3042;
-const {defineModels} = require('./models');
-const { initDatabase } = require('./init_db');
 
 app.use(cors());
 app.use(express.json());
 
-const sequelize = new Sequelize('sqlite::memory:');
-
-const {Account, Transaction} = defineModels(sequelize);
-
-await sequelize.sync()
-
-await initDatabase(Account)
+db.sequelize.sync()
+  .then(() => {
+    console.log("Synced db.");
+    initAccounts(db['Account'])
+      .then(()=>console.log('accounts initialized'))
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 //TODO - close the db connection before shutdown
 app.get("/balance/:address", (req, res) => {
