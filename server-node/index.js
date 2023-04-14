@@ -30,7 +30,6 @@ const Transaction = sequelize.define('Transaction', {
 }, {
   // Other model options go here
 });
-await Transaction.sync();
 
 const Account = sequelize.define('Account', {
   // Model attributes are defined here
@@ -47,15 +46,12 @@ const Account = sequelize.define('Account', {
 }, {
   // Other model options go here
 });
-await Account.sync();
 
 Account.hasMany(Transaction)
+Transaction.belongsTo(Account)
 
-const balances = {
-  "0x1": 100,
-  "0x2": 50,
-  "0x3": 75,
-};
+await sequelize.sync()
+
 
 app.get("/balance/:address", (req, res) => {
   const { address } = req.params;
