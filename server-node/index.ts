@@ -2,6 +2,8 @@ import db from "./models";
 import express, { Express, Request, Response } from 'express';
 import cors from "cors";
 import initAccounts from "./initAccounts";
+import { ModelStatic } from "sequelize";
+
 
 const app = express();
 
@@ -15,24 +17,34 @@ db.sequelize.sync()
     console.log("Synced db.");
     // @ts-ignore
     initAccounts(db['Account'])
-      .then(()=>console.log('accounts initialized'))
+      .then(() => console.log('accounts initialized'))
   })
   .catch((err: any) => {
     console.log("Failed to sync db: " + err.message);
   });
 
 //TODO - close the db connection before shutdown
-app.get("/balance/:address", (req, res) => {
+app.get("/balance/:address", async(req, res) => {
   const { address } = req.params;
-  const balance = 0
-  res.send({ balance });
+  //@ts-ignore
+  const accounts: ModelStatic<any> = db["Account"]
+
+  const account = await accounts.findOrCreate({
+    where: {
+      address: address
+    },
+    defaults: {
+      balance: 0
+    }
+  })
+  res.send({ balance: account[0].balance });
 });
 
 app.post("/send", (req, res) => {
   const { sender, recipient, amount } = req.body;
 
-  setInitialBalance(sender);
-  setInitialBalance(recipient);
+  // setInitialBalance(sender);
+  // setInitialBalance(recipient);
 
   // if (balances[sender] < amount) {
   //   res.status(400).send({ message: "Not enough funds!" });
@@ -47,8 +59,8 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}!`);
 });
 
-function setInitialBalance(address: any) {
-  // if (!balances[address]) {
-  //   balances[address] = 0;
-  // }
-}
+// function setInitialBalance(address: any) {
+//   if (!balances[address]) {
+//     balances[address] = 0;
+//   }
+// }
