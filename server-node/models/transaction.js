@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Account)
     }
   }
   Transaction.init({
@@ -29,6 +30,14 @@ module.exports = (sequelize, DataTypes) => {
     toAddress: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    amount: {
+      type: DataTypes.BigInt,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values: ['success', 'error']
     }
   }, {
     sequelize,
