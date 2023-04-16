@@ -42,6 +42,7 @@ app.get("/balance/:address", async (req, res) => {
 });
 
 app.post("/send", async (req, res) => {
+  const {signature, recoverBit} = req.headers
   const { fromAddress, toAddress, amount, timestamp, nonce } = req.body;
 
   //@ts-ignore
@@ -75,6 +76,11 @@ app.post("/send", async (req, res) => {
     amount,
     status: 'error'
   })
+  //NOTE - check public key == fromAddress, check message 
+  // was signed by the person that sign the signature, check
+  // timestamp >= last timestamp for that fromAddress, check
+  // nonce is unique for that fromAddress, check enough founds,
+  
   // setInitialBalance(sender);
   // setInitialBalance(recipient);
   //TODO - check that the transaction can be done, check auth
