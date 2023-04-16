@@ -1,4 +1,6 @@
-module.exports = async (account) => {
+import { ModelStatic } from "sequelize";
+
+export default async (account: ModelStatic<any>) => {
     await account.findOrCreate({
         where: {
             address: '0x8b2ff5c6bb4685e48707fc69a3729ee9b53162d7'

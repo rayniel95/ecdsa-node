@@ -1,8 +1,10 @@
-const db = require("./models");
-const express = require("express");
+import db from "./models";
+import express, { Express, Request, Response } from 'express';
+import cors from "cors";
+import initAccounts from "./initAccounts";
+
 const app = express();
-const cors = require("cors");
-const initAccounts = require("./initAccounts");
+
 const port = 3042;
 
 app.use(cors());
@@ -11,10 +13,11 @@ app.use(express.json());
 db.sequelize.sync()
   .then(() => {
     console.log("Synced db.");
+    // @ts-ignore
     initAccounts(db['Account'])
       .then(()=>console.log('accounts initialized'))
   })
-  .catch((err) => {
+  .catch((err: any) => {
     console.log("Failed to sync db: " + err.message);
   });
 
