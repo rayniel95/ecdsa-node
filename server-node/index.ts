@@ -15,6 +15,7 @@ app.use(express.json());
 db.sequelize.sync()
   .then(() => {
     console.log("Synced db.");
+    //TODO - use seeders to initialize the database
     // @ts-ignore
     initAccounts(db['Account'])
       .then(() => console.log('accounts initialized'))
@@ -24,7 +25,7 @@ db.sequelize.sync()
   });
 
 //TODO - close the db connection before shutdown
-app.get("/balance/:address", async(req, res) => {
+app.get("/balance/:address", async (req, res) => {
   const { address } = req.params;
   //@ts-ignore
   const accounts: ModelStatic<any> = db["Account"]
@@ -40,12 +41,43 @@ app.get("/balance/:address", async(req, res) => {
   res.send({ balance: account[0].balance });
 });
 
-app.post("/send", (req, res) => {
-  const { sender, recipient, amount } = req.body;
+app.post("/send", async (req, res) => {
+  const { fromAddress, toAddress, amount, timestamp, nonce } = req.body;
 
+  //@ts-ignore
+  const accounts: ModelStatic<any> = db["Account"]
+  //@ts-ignore
+  const transactions: ModelStatic<any> = db["Transaction"]
+
+  const toAccount = (await accounts.findOrCreate({
+    where: {
+      address: toAddress
+    },
+    defaults: {
+      balance: 0
+    }
+  }))[0]
+
+  const fromAccount = (await accounts.findOrCreate({
+    where: {
+      address: fromAddress
+    },
+    defaults: {
+      balance: 0
+    }
+  }))[0]
+
+  const transaction = transactions.create({
+    timestamp,
+    nonce,
+    fromAddress,
+    toAddress,
+    amount,
+    status: 'error'
+  })
   // setInitialBalance(sender);
   // setInitialBalance(recipient);
-
+  //TODO - check that the transaction can be done, check auth
   // if (balances[sender] < amount) {
   //   res.status(400).send({ message: "Not enough funds!" });
   // } else {
@@ -58,9 +90,3 @@ app.post("/send", (req, res) => {
 app.listen(port, () => {
   console.log(`Listening on port ${port}!`);
 });
-
-// function setInitialBalance(address: any) {
-//   if (!balances[address]) {
-//     balances[address] = 0;
-//   }
-// }
