@@ -112,6 +112,7 @@
     "dist", 
     "database", 
     "package.json",
-    "tsconfig.json"
+    "tsconfig.json",
+    "jest.config.js"
   ]
 }

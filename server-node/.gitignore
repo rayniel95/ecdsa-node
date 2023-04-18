@@ -4,3 +4,4 @@ database
 dist
 *-error.log
 *.lock
+coverage

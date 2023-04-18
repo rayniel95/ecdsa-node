@@ -4,9 +4,8 @@ import cors from "cors";
 import initAccounts from "./initAccounts";
 import { ModelStatic } from "sequelize";
 import * as crypto from "./utils";
-import { toHex } from "ethereum-cryptography/utils";
 
-const app = express();
+export const app = express();
 
 const port = 3042;
 
