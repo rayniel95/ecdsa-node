@@ -84,8 +84,7 @@ app.post("/send", async (req, res) => {
     status: 'error'
   })
   //NOTE - check
-  // timestamp >= last timestamp for that fromAddress, check
-  // nonce is unique for that fromAddress, check enough founds,
+  // timestamp >= last timestamp for that fromAddress, , check enough founds,
 
   //NOTE - check message was signed by the person that sign 
   // the signature
@@ -110,6 +109,20 @@ app.post("/send", async (req, res) => {
     return
   }
 
+  const doNotExistTransaction = await transactions.findOne({
+    where: {
+      nonce,
+      fromAddress
+    },
+  })
+  //NOTE - check nonce is unique for that fromAddress
+  if (doNotExistTransaction) {
+    res.status(401).send({
+      message: "Hey!!!, this is a replay attack"
+    })
+    return
+  }
+
   const lastAccountTransaction = await transactions.findOne({
     where: {
       fromAddress: address
@@ -124,18 +137,6 @@ app.post("/send", async (req, res) => {
     })
   }
 
-  const doNotExistTransaction = await transactions.findOne({
-    where: {
-      nonce
-    },
-  })
-  if (doNotExistTransaction) {
-    res.status(401).send({
-      message: "Hey!!!, this is a replay attack"
-    })
-    return
-  }
-  
   res.status(200).send({
     message: "You move your funds!!!"
   })
