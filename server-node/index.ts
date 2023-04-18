@@ -40,7 +40,7 @@ app.get("/balance/:address", async (req, res) => {
   }))[0]
   res.send({ balance: account.balance });
 });
-
+//TODO - refactor this method
 app.post("/send", async (req, res) => {
   const { signature, recoverbit } = req.headers
   const { fromAddress, toAddress, amount, timestamp, nonce } = req.body;
@@ -75,7 +75,7 @@ app.post("/send", async (req, res) => {
     }
   }))[0]
 
-  const transaction = transactions.create({
+  const transaction = await transactions.build({
     timestamp,
     nonce,
     fromAddress,
@@ -83,8 +83,6 @@ app.post("/send", async (req, res) => {
     amount,
     status: 'error'
   })
-  //NOTE - check
-  // timestamp >= last timestamp for that fromAddress, , check enough founds,
 
   //NOTE - check message was signed by the person that sign 
   // the signature
@@ -117,6 +115,7 @@ app.post("/send", async (req, res) => {
   })
   //NOTE - check nonce is unique for that fromAddress
   if (doNotExistTransaction) {
+    transaction.save()
     res.status(401).send({
       message: "Hey!!!, this is a replay attack"
     })
@@ -127,27 +126,39 @@ app.post("/send", async (req, res) => {
     where: {
       fromAddress: address
     },
-    order:[
+    order: [
       [timestamp, 'DESC']
     ]
   })
+
+  //TODO - check timestamp >= last timestamp for that 
+  // fromAddress 
   if (lastAccountTransaction.address > timestamp) {
-    res.status(200).send({
-      message: "You move your funds!!!"
+    transaction.save()
+    res.status(400).send({
+      message: "You can not send a new transaction before your last transaction"
     })
+    return
   }
 
-  res.status(200).send({
-    message: "You move your funds!!!"
-  })
-  //TODO - check that the transaction can be done, check auth
-  // if (balances[sender] < amount) {
-  //   res.status(400).send({ message: "Not enough funds!" });
-  // } else {
-  //   balances[sender] -= amount;
-  //   balances[recipient] += amount;
-  //   res.send({ balance: balances[sender] });
-  // }
+  //NOTE - check enough funds
+  if (fromAccount.balance < amount) {
+    transaction.save()
+    res.status(400).send({ message: "Not enough funds!" });
+    return
+  } 
+
+  fromAccount.balance -= amount;
+  toAccount.balance += amount;
+
+  transaction.status = 'success'
+
+  fromAccount.save()
+  toAccount.save()
+  transaction.save()
+
+  res.send({ balance: fromAccount.balance });
+
 });
 
 app.listen(port, () => {
