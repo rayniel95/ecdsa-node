@@ -95,6 +95,13 @@ app.post("/send", async (req, res) => {
     res.status(401).send({ message: "This is not your address" })
   }
 
+  if (!crypto.verifySignature(
+    JSON.stringify(req.body),
+    signature as string,
+    parseInt(recoverBit! as string)
+  )) {
+    res.status(401).send({ message: "You are not the signer of this message" })
+  }
   
   //TODO - check that the transaction can be done, check auth
   // if (balances[sender] < amount) {

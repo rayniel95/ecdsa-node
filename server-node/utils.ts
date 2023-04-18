@@ -11,8 +11,12 @@ function recoverKey(message: string, signature: string, recoveryBit: number) {
     return secp.recoverPublicKey(hashMessage(message), signature, recoveryBit)
 }
 
-export function verifySignature(message: string, signature: string, publicKey: string) {
-    return secp.verify(signature, hashMessage(message), publicKey)
+export function verifySignature(message: string, signature: string, recoverBit: number) {
+    return secp.verify(
+        signature,
+        hashMessage(message),
+        recoverKey(message, signature, recoverBit)
+    )
 }
 
 function getAddress(publicKey: Uint8Array) {
