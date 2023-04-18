@@ -42,14 +42,15 @@ app.get("/balance/:address", async (req, res) => {
 });
 
 app.post("/send", async (req, res) => {
-  const { signature, recoverBit } = req.headers
+  const { signature, recoverbit } = req.headers
   const { fromAddress, toAddress, amount, timestamp, nonce } = req.body;
 
-  if (!(signature && recoverBit && fromAddress && toAddress &&
+  if (!(signature && recoverbit && fromAddress && toAddress &&
     amount && timestamp && nonce)) {
     res.status(400).send({
       message: 'Malformed request, some parameters are missing'
     })
+    return
   }
   //@ts-ignore
   const accounts: ModelStatic<any> = db["Account"]
@@ -82,16 +83,16 @@ app.post("/send", async (req, res) => {
     amount,
     status: 'error'
   })
-  //NOTE - check public key == fromAddress, check message 
-  // was signed by the person that sign the signature, check
+  //NOTE - check
   // timestamp >= last timestamp for that fromAddress, check
   // nonce is unique for that fromAddress, check enough founds,
-  //TODO - check the typing here
 
+  //NOTE - check message was signed by the person that sign 
+  // the signature
   if (!crypto.verifySignature(
     JSON.stringify(req.body),
     signature as string,
-    parseInt(recoverBit! as string)
+    parseInt(recoverbit! as string)
   )) {
     res.status(401).send({
       message: "You are not the signer of this message"
@@ -99,14 +100,18 @@ app.post("/send", async (req, res) => {
   }
 
   const address = crypto.getAddressFromSignature(
-    JSON.stringify(req.body), signature as string, parseInt(recoverBit! as string)
+    JSON.stringify(req.body), signature as string, parseInt(recoverbit! as string)
   )
+  //NOTE - check public key == fromAddress
   if (address != fromAccount.address) {
     res.status(401).send({
       message: "You can not move funds from the address of anther person"
     })
+    return
   }
-
+  res.status(200).send({
+    message: "You move your funds!!!"
+  })
   //TODO - check that the transaction can be done, check auth
   // if (balances[sender] < amount) {
   //   res.status(400).send({ message: "Not enough funds!" });
