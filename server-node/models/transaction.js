@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     amount: {
-      type: DataTypes.BigInt,
+      type: DataTypes.BIGINT,
       allowNull: false
     },
     status: {
