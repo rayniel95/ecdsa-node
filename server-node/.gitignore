@@ -2,3 +2,5 @@
 node_modules
 database
 dist
+*-error.log
+*.lock

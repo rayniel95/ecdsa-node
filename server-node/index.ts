@@ -3,7 +3,8 @@ import express, { Express, Request, Response } from 'express';
 import cors from "cors";
 import initAccounts from "./initAccounts";
 import { ModelStatic } from "sequelize";
-
+import * as crypto from "./utils";
+import { toHex } from "ethereum-cryptography/utils";
 
 const app = express();
 
@@ -30,21 +31,27 @@ app.get("/balance/:address", async (req, res) => {
   //@ts-ignore
   const accounts: ModelStatic<any> = db["Account"]
 
-  const account = await accounts.findOrCreate({
+  const account = (await accounts.findOrCreate({
     where: {
       address: address
     },
     defaults: {
       balance: 0
     }
-  })
-  res.send({ balance: account[0].balance });
+  }))[0]
+  res.send({ balance: account.balance });
 });
 
 app.post("/send", async (req, res) => {
-  const {signature, recoverBit} = req.headers
+  const { signature, recoverBit } = req.headers
   const { fromAddress, toAddress, amount, timestamp, nonce } = req.body;
 
+  if (!(signature && recoverBit && fromAddress && toAddress &&
+    amount && timestamp && nonce)) {
+    res.status(400).send({
+      message: 'Malformed request, some parameters are missing'
+    })
+  }
   //@ts-ignore
   const accounts: ModelStatic<any> = db["Account"]
   //@ts-ignore
@@ -80,9 +87,15 @@ app.post("/send", async (req, res) => {
   // was signed by the person that sign the signature, check
   // timestamp >= last timestamp for that fromAddress, check
   // nonce is unique for that fromAddress, check enough founds,
+  //TODO - check the typing here
+  const address = crypto.getAddressFromSignature(
+    JSON.stringify(req.body), signature as string, parseInt(recoverBit! as string)
+  )
+  if (address != fromAccount.address) {
+    res.status(401).send({ message: "This is not your address" })
+  }
+
   
-  // setInitialBalance(sender);
-  // setInitialBalance(recipient);
   //TODO - check that the transaction can be done, check auth
   // if (balances[sender] < amount) {
   //   res.status(400).send({ message: "Not enough funds!" });
