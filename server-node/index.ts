@@ -109,6 +109,33 @@ app.post("/send", async (req, res) => {
     })
     return
   }
+
+  const lastAccountTransaction = await transactions.findOne({
+    where: {
+      fromAddress: address
+    },
+    order:[
+      [timestamp, 'DESC']
+    ]
+  })
+  if (lastAccountTransaction.address > timestamp) {
+    res.status(200).send({
+      message: "You move your funds!!!"
+    })
+  }
+
+  const doNotExistTransaction = await transactions.findOne({
+    where: {
+      nonce
+    },
+  })
+  if (doNotExistTransaction) {
+    res.status(401).send({
+      message: "Hey!!!, this is a replay attack"
+    })
+    return
+  }
+  
   res.status(200).send({
     message: "You move your funds!!!"
   })
