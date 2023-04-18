@@ -88,21 +88,26 @@ app.post("/send", async (req, res) => {
   // timestamp >= last timestamp for that fromAddress, check
   // nonce is unique for that fromAddress, check enough founds,
   //TODO - check the typing here
-  const address = crypto.getAddressFromSignature(
-    JSON.stringify(req.body), signature as string, parseInt(recoverBit! as string)
-  )
-  if (address != fromAccount.address) {
-    res.status(401).send({ message: "This is not your address" })
-  }
 
   if (!crypto.verifySignature(
     JSON.stringify(req.body),
     signature as string,
     parseInt(recoverBit! as string)
   )) {
-    res.status(401).send({ message: "You are not the signer of this message" })
+    res.status(401).send({
+      message: "You are not the signer of this message"
+    })
   }
-  
+
+  const address = crypto.getAddressFromSignature(
+    JSON.stringify(req.body), signature as string, parseInt(recoverBit! as string)
+  )
+  if (address != fromAccount.address) {
+    res.status(401).send({
+      message: "You can not move funds from the address of anther person"
+    })
+  }
+
   //TODO - check that the transaction can be done, check auth
   // if (balances[sender] < amount) {
   //   res.status(400).send({ message: "Not enough funds!" });
