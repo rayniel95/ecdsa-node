@@ -127,11 +127,11 @@ app.post("/send", async (req, res) => {
       fromAddress: address
     },
     order: [
-      [timestamp, 'DESC']
+      ["timestamp", "DESC"]
     ]
   })
 
-  //TODO - check timestamp >= last timestamp for that 
+  //NOTE - check timestamp >= last timestamp for that 
   // fromAddress 
   if (lastAccountTransaction.address > timestamp) {
     transaction.save()
@@ -157,8 +157,7 @@ app.post("/send", async (req, res) => {
   toAccount.save()
   transaction.save()
 
-  res.send({ balance: fromAccount.balance });
-
+  res.status(200).send({ balance: fromAccount.balance });
 });
 
 app.listen(port, () => {

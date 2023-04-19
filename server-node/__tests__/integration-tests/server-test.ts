@@ -1,7 +1,8 @@
 import request from "supertest";
 import { app } from "../../index";
 import * as crypto from "../../utils";
-
+//TODO - add more tests
+//TODO - clean the database before each test
 xdescribe("get server endpoint tests", () => {
     let nonce = 1
     //TODO - beforeeach clean de database
@@ -22,7 +23,7 @@ xdescribe("get server endpoint tests", () => {
 });
 
 describe("post server endpoint tests", () => {
-    let nonce = 1
+    let nonce = 6
     //TODO - beforeeach clean de database
     test("test send balance from default account to default account", async () => {
         const payload = {
