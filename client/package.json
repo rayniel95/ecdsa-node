@@ -9,9 +9,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.12.9",
+    "ethers": "^5",
     "next": "latest",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "wagmi": "^0.12.12"
   },
   "devDependencies": {
     "@types/node": "18.15.12",
