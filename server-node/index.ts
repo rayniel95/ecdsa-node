@@ -2,7 +2,7 @@ import db from "./models";
 import express, { Express, Request, Response } from 'express';
 import cors from "cors";
 import initAccounts from "./initAccounts";
-import { ModelStatic } from "sequelize";
+import { BIGINT, ModelStatic } from "sequelize";
 import * as crypto from "./utils";
 
 export const app = express();
@@ -88,7 +88,7 @@ app.post("/send", async (req, res) => {
   if (!crypto.verifySignature(
     JSON.stringify(req.body),
     signature as string,
-    recoverbit? parseInt(recoverbit! as string):undefined
+    recoverbit ? parseInt(recoverbit! as string) : undefined
   )) {
     res.status(401).send({
       message: "You are not the signer of this message"
@@ -145,10 +145,17 @@ app.post("/send", async (req, res) => {
     transaction.save()
     res.status(400).send({ message: "Not enough funds!" });
     return
-  } 
+  }
 
-  fromAccount.balance -= amount;
-  toAccount.balance += amount;
+  let fromAccountBalance = BigInt(fromAccount.balance)
+  let toAccountBalance = BigInt(toAccount.balance)
+  const bigAmount = BigInt(amount)
+
+  fromAccountBalance -= bigAmount
+  toAccountBalance += bigAmount
+
+  fromAccount.balance = fromAccountBalance
+  toAccount.balance = toAccountBalance
 
   transaction.status = 'success'
 
@@ -156,7 +163,7 @@ app.post("/send", async (req, res) => {
   toAccount.save()
   transaction.save()
 
-  res.status(200).send({ balance: fromAccount.balance });
+  res.status(200).send({ balance: fromAccount.balance.toString() });
 });
 
 app.listen(port, () => {
