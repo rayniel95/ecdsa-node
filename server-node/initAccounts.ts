@@ -27,4 +27,13 @@ export default async (account: ModelStatic<any>) => {
             balance: 100
         }
     })
+
+    await account.findOrCreate({
+        where: {
+            address: '0x5f0b5C7D5939D6fEd09B27c7449F4D7d813AEfe4'
+        },
+        defaults: {
+            balance: 100
+        }
+    })
 };
