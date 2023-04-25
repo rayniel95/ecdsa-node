@@ -36,10 +36,10 @@ function useWalletAddress(): [string, Dispatch<SetStateAction<string>>] {
   useEffect(() => {
     if (isConnected) {
       setSavedAddress(address)
-     } 
+    }
   }, [isConnected]);
- 
- return [savedAddress, setSavedAddress]
+
+  return [savedAddress, setSavedAddress]
 }
 
 export default function Home() {
@@ -60,6 +60,18 @@ export default function Home() {
             setAddress={setAddress}
           />
           <Transfer setBalance={setBalance} address={address} />
+        </div>
+        <div>
+          <p>
+            Made with love by
+          </p>
+          <p>
+            <a href="https://rayniel95.github.io/">Rainyel Ramos</a>
+          </p>
+          <p>
+            <a href="https://github.com/rayniel95/ecdsa-node">Take a look to the code</a>
+          </p>
+
         </div>
       </RainbowKitProvider>
     </WagmiConfig>
