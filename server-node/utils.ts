@@ -36,7 +36,7 @@ export function getAddressFromSignature(message: string, signature: string, reco
             recoverKey(message, signature, recoveryBit))
         )}`
     }
-    retur ethers.utils.recoverAddress()
+    return ethers.utils.verifyMessage(message,signature)
 }
 
 export async function getSignature(message: string, privateKey: string) {
