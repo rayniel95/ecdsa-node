@@ -99,7 +99,7 @@ app.post("/send", async (req, res) => {
     JSON.stringify(req.body), signature as string, parseInt(recoverbit! as string)
   )
   //NOTE - check public key == fromAddress
-  if (address != fromAccount.address) {
+  if (address !== fromAccount.address) {
     res.status(401).send({
       message: "You can not move funds from the address of anther person"
     })
@@ -132,7 +132,7 @@ app.post("/send", async (req, res) => {
 
   //NOTE - check timestamp >= last timestamp for that 
   // fromAddress 
-  if (lastAccountTransaction.address > timestamp) {
+  if (lastAccountTransaction && lastAccountTransaction.address > timestamp) {
     transaction.save()
     res.status(400).send({
       message: "You can not send a new transaction before your last transaction"
