@@ -5,10 +5,9 @@ import server from "./server";
 export function Transfer({ address, setBalance }) {
   const [sendAmount, setSendAmount] = useState("");
   const [recipient, setRecipient] = useState("");
+  const [privateKey, setPrivateKey] = useState("")
 
-  const setValue = (setter) => (evt) => setter(evt.target.value);
-
-  async function transfer(evt) {
+  async function transfer(evt: { preventDefault: () => void; }) {
     evt.preventDefault();
 
     try {
@@ -30,11 +29,19 @@ export function Transfer({ address, setBalance }) {
       <h1>Send Transaction</h1>
 
       <label>
+        Private Key
+        <input
+          placeholder="1, 2, 3..."
+          value={privateKey}
+          onChange={(e)=>setPrivateKey(e.target.value)}
+        ></input>
+      </label>
+      <label>
         Send Amount
         <input
           placeholder="1, 2, 3..."
           value={sendAmount}
-          onChange={setValue(setSendAmount)}
+          onChange={(e)=>setSendAmount(e.target.value)}
         ></input>
       </label>
 
@@ -43,7 +50,7 @@ export function Transfer({ address, setBalance }) {
         <input
           placeholder="Type an address, for example: 0x2"
           value={recipient}
-          onChange={setValue(setRecipient)}
+          onChange={(e)=>setRecipient(e.target.value)}
         ></input>
       </label>
 
