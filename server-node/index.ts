@@ -45,7 +45,7 @@ app.post("/send", async (req, res) => {
   const { signature, recoverbit } = req.headers
   const { fromAddress, toAddress, amount, timestamp, nonce } = req.body;
 
-  if (!(signature && recoverbit && fromAddress && toAddress &&
+  if (!(signature && fromAddress && toAddress &&
     amount && timestamp && nonce)) {
     res.status(400).send({
       message: 'Malformed request, some parameters are missing'
@@ -83,13 +83,12 @@ app.post("/send", async (req, res) => {
     amount,
     status: 'error'
   })
-
   //NOTE - check message was signed by the person that sign 
   // the signature
   if (!crypto.verifySignature(
     JSON.stringify(req.body),
     signature as string,
-    parseInt(recoverbit! as string)
+    recoverbit? parseInt(recoverbit! as string):undefined
   )) {
     res.status(401).send({
       message: "You are not the signer of this message"
