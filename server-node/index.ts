@@ -71,7 +71,7 @@ app.post("/send", async (req, res) => {
       address: fromAddress
     },
     defaults: {
-      balance: 0
+      balance: 50
     }
   }))[0]
 
