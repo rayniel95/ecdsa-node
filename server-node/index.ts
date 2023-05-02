@@ -35,7 +35,7 @@ app.get("/balance/:address", async (req, res) => {
       address: address
     },
     defaults: {
-      balance: 0
+      balance: 50
     }
   }))[0]
   res.send({ balance: account.balance });

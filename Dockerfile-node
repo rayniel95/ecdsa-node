@@ -8,6 +8,8 @@ COPY server-node/package.json ./
 
 RUN yarn install
 # If you are building your code for production
-COPY . .
+#TODO - mount the volume
+#TODO - compile and copy the compiled code
+COPY ./server-node .
 EXPOSE 8080
 CMD [ "node", "server.js" ]
