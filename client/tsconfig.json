@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/_app.tsx",
-    "next.config.js",
+    "next.config.cjs",
     ".next/types/**/*.ts"
   ],
   "exclude": [
