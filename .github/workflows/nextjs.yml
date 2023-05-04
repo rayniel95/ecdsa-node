@@ -22,7 +22,8 @@ jobs:
           node-version: 16
           cache: yarn
           cache-dependency-path: client/yarn.lock
-      - name: Build
+      - name: Build      
+        working-directory: client
         run: |
           yarn ci
           yarn build
