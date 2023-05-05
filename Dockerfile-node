@@ -5,11 +5,10 @@ WORKDIR /usr/src/app
 # A wildcard is used to ensure both package.json AND 
 # package-lock.json are copied where available (npm@5+)
 COPY server-node/package.json ./
-
 RUN yarn install
-# If you are building your code for production
-#TODO - mount the volume
+COPY server-node ./
 #TODO - compile and copy the compiled code
-COPY ./server-node .
-EXPOSE 8080
-CMD [ "node", "server.js" ]
+RUN yarn build
+# COPY ./server-node/dist .
+EXPOSE 3042
+CMD [ "node", "dist/index.js" ]
