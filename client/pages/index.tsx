@@ -47,33 +47,32 @@ export default function Home() {
   const [address, setAddress] = useWalletAddress()
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains} modalSize="compact">
-        <div className="container">
-          <ConnectButton />
-        </div>
-        <div className="app">
-          <Wallet
-            balance={balance}
-            setBalance={setBalance}
-            address={address}
-            setAddress={setAddress}
-          />
-          <Transfer setBalance={setBalance} address={address} />
-        </div>
-        <div>
-          <p>
-            Made with love by
-          </p>
-          <p>
-            <a href="https://rayniel95.github.io/">Rainyel Ramos</a>
-          </p>
-          <p>
-            <a href="https://github.com/rayniel95/ecdsa-node">Take a look to the code</a>
-          </p>
+    <>
+      <div>
+        <p>
+          Made with ❤️ by <a href="https://rayniel95.github.io/">Rainyel Ramos</a>
+        </p>
+        <p>
+          <a href="https://github.com/rayniel95/ecdsa-node">Take a look to the code</a>
+        </p>
 
-        </div>
-      </RainbowKitProvider>
-    </WagmiConfig>
+      </div>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider chains={chains} modalSize="compact">
+          <div className="container">
+            <ConnectButton />
+          </div>
+          <div className="app">
+            <Wallet
+              balance={balance}
+              setBalance={setBalance}
+              address={address}
+              setAddress={setAddress}
+            />
+            <Transfer setBalance={setBalance} address={address} />
+          </div>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </>
   );
 }
