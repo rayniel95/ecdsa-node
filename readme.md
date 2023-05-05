@@ -4,33 +4,19 @@ This project is an example of using a client and server to facilitate transfers 
 
 However, something that we would like to incoporate is Public Key Cryptography. By using Elliptic Curve Digital Signatures we can make it so the server only allows transfers that have been signed for by the person who owns the associated address.
 
-### Video instructions
-For an overview of this project as well as getting started instructions, check out the following video:
+### Steps to create the Nextjs client
 
-https://www.loom.com/share/0d3c74890b8e44a5918c4cacb3f646c4
- 
-### Client
+1. Go to https://rayniel95.github.io/ecdsa-node/
 
-The client folder contains a [react app](https://reactjs.org/) using [vite](https://vitejs.dev/). To get started, follow these steps:
+### Steps to create the node server
 
-1. Open up a terminal in the `/client` folder
-2. Run `npm install` to install all the depedencies
-3. Run `npm run dev` to start the application 
-4. Now you should be able to visit the app at http://127.0.0.1:5173/
+1. Install [Docker](https://www.docker.com/)
+2. Download the project
+3. Open a terminal in the project folder
+4. Build the image, execute: `docker build ./ -f Dockerfile-node -t server-node`
+5. Run the container, execute: `docker run -it -p 3042:3042 server-node`
 
-### Server
-
-The server folder contains a node.js server using [express](https://expressjs.com/). To run the server, follow these steps:
-
-1. Open a terminal within the `/server` folder 
-2. Run `npm install` to install all the depedencies 
-3. Run `node index` to start the server 
-
-The application should connect to the default server port (3042) automatically! 
-
-_Hint_ - Use [nodemon](https://www.npmjs.com/package/nodemon) instead of `node` to automatically restart the server on any changes.
-
-TODO
-- add golang server
-- add rust server
-- add sign the message using custom private key on frontend
+### TODO
+- [ ] add golang server
+- [ ] add rust server
+- [ ] add sign the message using custom private key on frontend
