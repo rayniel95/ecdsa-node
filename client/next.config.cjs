@@ -6,6 +6,7 @@
 const nextConfig = {
     output: 'export',
     basePath: '/ecdsa-node',
+    assetPrefix:'/ecdsa-node/',
     experimental: {
         appDir: true,
     },
