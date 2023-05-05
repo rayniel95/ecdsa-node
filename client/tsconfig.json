@@ -21,14 +21,15 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "strictNullChecks": false,
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "pages/_app.tsx",
-    "next.config.cjs",
+    "next.config.js",
     ".next/types/**/*.ts"
   ],
   "exclude": [
