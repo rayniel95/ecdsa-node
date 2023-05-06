@@ -22,6 +22,9 @@ However, something that we would like to incoporate is Public Key Cryptography. 
 4. Build the image, execute: `docker build ./ -f Dockerfile-node -t server-node`
 5. Run the container, execute: `docker run -it -p 3042:3042 server-node`
 
+## How it works
+
+![](diagram.svg)
 ### Demo
 
 See it on Youtube
