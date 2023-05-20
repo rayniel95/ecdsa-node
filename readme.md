@@ -27,7 +27,7 @@ However, something that we would like to incoporate is Public Key Cryptography. 
 ![](diagram.svg)
 ### Demo
 
-See it on Youtube
+Watch it on Youtube
 
 ### TODO
 - [ ] add golang server
