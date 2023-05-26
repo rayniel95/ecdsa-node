@@ -27,10 +27,11 @@ However, something that we would like to incoporate is Public Key Cryptography. 
 ![](diagram.svg)
 ### Demo
 
-Watch it on Youtube
+[Watch the demo in Youtube](https://youtu.be/eSoLngQydYc)
+[Watch the code explanation in Youtube](https://youtu.be/_9IlKv0q2YI)
 
 ### TODO
 - [ ] add golang server
 - [ ] add rust server
 - [ ] add sign the message using custom private key on frontend
-- [ ] add a demo
+- [ x ] add a demo
